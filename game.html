@@ -1,193 +1,313 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رحلة البقاء والقرار المصيري</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Survival RPG - عالم التحديات والمغامرة</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            50: '#f0fdfa',
-                            500: '#14b8a6',
-                            900: '#134e4a',
-                            dark: '#0f172a'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
-        body {
-            font-family: 'Cairo', sans-serif;
-        }
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(20, 184, 166, 0.3);
-        }
+        body { font-family: 'Cairo', sans-serif; }
+        .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); }
+        .glow { box-shadow: 0 0 20px rgba(13, 148, 136, 0.4); }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 flex flex-col items-center justify-center">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-4">
 
-    <div class="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl glow-effect relative overflow-hidden">
+    <div class="max-w-3xl w-full glass border border-slate-800 rounded-3xl p-6 glow relative overflow-hidden">
         
-        <!-- Header / Stats -->
+        <!-- Top Bar: Languages & Gold -->
         <div class="flex justify-between items-center pb-4 mb-6 border-b border-slate-800">
-            <h1 class="text-xl font-bold text-teal-400 flex items-center gap-2">
-                <span>⚔️</span> رحلة البقاء
-            </h1>
-            <div class="flex items-center gap-4 text-sm font-semibold">
-                <div class="bg-rose-950/50 border border-rose-800/50 px-3 py-1 rounded-full text-rose-300">
-                    ❤️ الصحة: <span id="health">100</span>%
-                </div>
-                <div class="bg-amber-950/50 border border-amber-800/50 px-3 py-1 rounded-full text-amber-300">
-                    🎒 الموارد: <span id="resources">50</span>
-                </div>
+            <!-- Language Selector -->
+            <div class="flex gap-2 text-xs sm:text-sm font-bold">
+                <button onclick="setLanguage('ar')" class="px-3 py-1 bg-teal-800 hover:bg-teal-700 rounded-lg">العربية</button>
+                <button onclick="setLanguage('en')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded-lg">English</button>
+                <button onclick="setLanguage('fr')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded-lg">Français</button>
             </div>
-        </div>
-
-        <!-- Game Screen -->
-        <div id="story-container" class="space-y-6">
-            <div class="bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-slate-200 leading-relaxed text-lg" id="story-text">
-                تستيقظ في عالم غريب بعد كارثة عالمية. تحيط بك الأنقاض والأصوات المريبة من كل مكان. ماذا ستفعل الآن؟
-            </div>
-
-            <!-- Choice Buttons -->
-            <div id="choices-container" class="grid grid-cols-1 gap-3">
-                <button onclick="makeChoice(1)" class="w-full text-right p-4 bg-slate-800 hover:bg-teal-900/40 border border-slate-700 hover:border-teal-500/50 rounded-xl transition duration-200 text-slate-100 font-medium flex items-center justify-between group">
-                    <span>🔍 استكشاف المأوى المجهول المباشر أمامك.</span>
-                    <span class="text-teal-400 opacity-0 group-hover:opacity-100 transition">←</span>
-                </button>
-                <button onclick="makeChoice(2)" class="w-full text-right p-4 bg-slate-800 hover:bg-teal-900/40 border border-slate-700 hover:border-teal-500/50 rounded-xl transition duration-200 text-slate-100 font-medium flex items-center justify-between group">
-                    <span>🏃 البحث عن طعام وماء في الغابة القريبة.</span>
-                    <span class="text-teal-400 opacity-0 group-hover:opacity-100 transition">←</span>
+            <!-- Wallet / Monetization Button -->
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-950/80 border border-amber-500/50 px-4 py-1.5 rounded-full text-amber-300 font-bold text-sm flex items-center gap-1">
+                    🪙 <span id="gold-display">100</span>
+                </div>
+                <button onclick="showAdReward()" class="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-black px-3 py-1.5 rounded-full text-xs shadow-lg animate-pulse">
+                    🎬 <span id="ad-btn-text">+50 ذهب (إعلان)</span>
                 </button>
             </div>
         </div>
 
-        <!-- Restart Button (Hidden initially) -->
-        <div id="restart-container" class="hidden text-center pt-4">
-            <button onclick="resetGame()" class="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl shadow-lg transition duration-200">
-                🔄 إعادة التشغيل من الجديد
-            </button>
+        <!-- Character Selection View -->
+        <div id="character-view" class="space-y-6">
+            <h2 id="select-char-title" class="text-2xl font-extrabold text-center text-teal-400">اختر شخصيتك للبدء بالمغامرة</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div onclick="selectCharacter('warrior')" class="p-4 bg-slate-900 border border-slate-700 hover:border-teal-500 rounded-2xl cursor-pointer text-center hover:scale-105 transition">
+                    <div class="text-4xl mb-2">⚔️</div>
+                    <h3 id="char-warrior-name" class="font-bold text-lg text-rose-400">المحارب</h3>
+                    <p id="char-warrior-desc" class="text-xs text-slate-400 mt-2">صحة عالية وقوة هجومية في القتال.</p>
+                </div>
+                <div onclick="selectCharacter('explorer')" class="p-4 bg-slate-900 border border-slate-700 hover:border-teal-500 rounded-2xl cursor-pointer text-center hover:scale-105 transition">
+                    <div class="text-4xl mb-2">🏹</div>
+                    <h3 id="char-explorer-name" class="font-bold text-lg text-emerald-400">المستكشف</h3>
+                    <p id="char-explorer-desc" class="text-xs text-slate-400 mt-2">يعثر على موارد وذهب أكثر في مغامراته.</p>
+                </div>
+                <div onclick="selectCharacter('doctor')" class="p-4 bg-slate-900 border border-slate-700 hover:border-teal-500 rounded-2xl cursor-pointer text-center hover:scale-105 transition">
+                    <div class="text-4xl mb-2">🩺</div>
+                    <h3 id="char-doctor-name" class="font-bold text-lg text-sky-400">الطبيب</h3>
+                    <p id="char-doctor-desc" class="text-xs text-slate-400 mt-2">يستعيد صحته أسرع ويمتلك أدوية علاجية.</p>
+                </div>
+            </div>
         </div>
+
+        <!-- Main Gameplay View (Hidden at start) -->
+        <div id="game-view" class="hidden space-y-6">
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 text-center font-bold text-xs sm:text-sm">
+                <div class="bg-rose-950/40 border border-rose-800/40 p-2 rounded-xl text-rose-300">
+                    ❤️ <span id="lbl-hp">الصحة</span>: <span id="hp">100</span>
+                </div>
+                <div class="bg-sky-950/40 border border-sky-800/40 p-2 rounded-xl text-sky-300">
+                    ⭐ <span id="lbl-xp">الخبرة</span>: <span id="xp">0</span>
+                </div>
+                <div class="bg-teal-950/40 border border-teal-800/40 p-2 rounded-xl text-teal-300">
+                    👤 <span id="player-class-display">محارب</span>
+                </div>
+            </div>
+
+            <!-- Story Box -->
+            <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800 min-h-[120px] text-slate-200 text-base leading-relaxed" id="story-box">
+                ...
+            </div>
+
+            <!-- Choices -->
+            <div id="choices-box" class="grid grid-cols-1 gap-3"></div>
+        </div>
+
     </div>
 
     <script>
-        let gameState = {
-            health: 100,
-            resources: 50,
-            step: 0
-        };
-
-        const storyTree = {
-            0: {
-                text: "تستيقظ في عالم غريب بعد كارثة عالمية. تحيط بك الأنقاض والأصوات المريبة من كل مكان. ماذا ستفعل الآن؟",
-                choices: [
-                    { text: "🔍 استكشاف المأوى المجهول المباشر أمامك.", next: 1, health: 0, resources: 10 },
-                    { text: "🏃 البحث عن طعام وماء في الغابة القريبة.", next: 2, health: -10, resources: 20 }
-                ]
+        const translations = {
+            ar: {
+                selectTitle: "اختر شخصيتك للبدء بالمغامرة",
+                warriorName: "المحارب", warriorDesc: "صحة عالية وقوة هجومية في القتال.",
+                explorerName: "المستكشف", explorerDesc: "يعثر على موارد وذهب أكثر في مغامراته.",
+                doctorName: "الطبيب", doctorDesc: "يستعيد صحته أسرع ويمتلك أدوية علاجية.",
+                adBtn: "+50 ذهب (إعلان)",
+                hp: "الصحة", xp: "الخبرة",
+                adWatchMsg: "🎬 شاهدت الإعلان وحصلت على +50 مكافأة ذهبية!",
+                gameOver: "💀 انتهت حياتك في هذا التحدي الخطير!",
+                restartBtn: "🔄 إعادة المحاولة بشخصية جديدة"
             },
-            1: {
-                text: "دخلت المأوى ووجدت صندوق مؤن قديم، لكنك سمعت صوتاً خفياً خلف الباب المغلق!",
-                choices: [
-                    { text: "📦 فتح الصندوق بسرعة وأخذ الغنائم.", next: 3, health: 0, resources: 30 },
-                    { text: "🚪 فحص الباب المغلق والتأكد من عدم وجود تهديد.", next: 4, health: -15, resources: 0 }
-                ]
+            en: {
+                selectTitle: "Choose Your Character to Begin",
+                warriorName: "Warrior", warriorDesc: "High health and strong combat power.",
+                explorerName: "Explorer", explorerDesc: "Finds more resources and gold on quests.",
+                doctorName: "Medic", doctorDesc: "Heals faster and carries medical supplies.",
+                adBtn: "+50 Gold (Ad)",
+                hp: "Health", xp: "XP",
+                adWatchMsg: "🎬 You watched an ad and earned +50 Gold!",
+                gameOver: "💀 You perished in this dangerous challenge!",
+                restartBtn: "🔄 Try Again with New Character"
             },
-            2: {
-                text: "في الغابة، عثرت على نبع ماء نقي، لكن ظهر ذئب مفترس يحرس المنطقة!",
-                choices: [
-                    { text: "⚔️ مواجهة الذئب بسلاح بدائي.", next: 5, health: -30, resources: 15 },
-                    { text: "🧗 التراجع والاهتمام بالهرب بأمان.", next: 0, health: -5, resources: 0 }
-                ]
-            },
-            3: {
-                text: "مبروك! حصلت على موارد قيمة ونجوت بنجاح من المرحلة الأولى! هل تريد مواصلة مغامرتك؟",
-                choices: [
-                    { text: "🏆 الفوز والإنهاء بنجاح!", next: 'win', health: 10, resources: 50 }
-                ]
-            },
-            4: {
-                text: "كان هناك فخ متفجر خلف الباب! تعرضت لإصابة خطيرة.",
-                choices: [
-                    { text: "💔 محاولة علاج نفسك.", next: 'lose', health: -50, resources: -20 }
-                ]
-            },
-            5: {
-                text: "انتصرت على الذئب بشجاعة واستوليت على المنطقة والموارد!",
-                choices: [
-                    { text: "🌟 إكمال المغامرة كبطل العصر!", next: 'win', health: 20, resources: 40 }
-                ]
+            fr: {
+                selectTitle: "Choisissez votre personnage",
+                warriorName: "Guerrier", warriorDesc: "Santé élevée et grande puissance de combat.",
+                explorerName: "Explorateur", explorerDesc: "Trouve plus de ressources et d'or.",
+                doctorName: "Médecin", doctorDesc: "Se soigne plus vite et possède des soins.",
+                adBtn: "+50 Or (Pub)",
+                hp: "Santé", xp: "XP",
+                adWatchMsg: "🎬 Vous avez regardé une pub et gagné +50 Or!",
+                gameOver: "💀 Vous avez péri dans ce défi dangereux!",
+                restartBtn: "🔄 Réessayer avec un nouveau personnage"
             }
         };
 
-        function updateUI() {
-            document.getElementById('health').innerText = gameState.health;
-            document.getElementById('resources').innerText = gameState.resources;
-        }
+        let currentLang = 'ar';
+        let player = { char: '', hp: 100, xp: 0, gold: 100 };
+        let currentStep = 0;
 
-        function makeChoice(choiceIndex) {
-            const currentStory = storyTree[gameState.step];
-            const selected = currentStory.choices[choiceIndex - 1];
+        const adventureTree = {
+            ar: [
+                {
+                    text: "بدأت مغامرتك في الغابة المظلمة، ووجدت خريطة كنز قديمة بجانب هيكل عظمي!",
+                    choices: [
+                        { text: "🗺️ اتباع خريطة الكنز نحو الكهف المهجور.", next: 1, hp: 0, xp: 20, gold: 30 },
+                        { text: "🏹 تجاهل الخريطة والتخييم لبناء مأوى آمن.", next: 2, hp: 10, xp: 10, gold: 0 }
+                    ]
+                },
+                {
+                    text: "وصلت إلى الكهف المظلم وسمعت صوتاً غريباً، هناك صندوق مجوهرات يحق لك فتحه أو مواجهة الوحش!",
+                    choices: [
+                        { text: "⚔️ الهجوم على مصدر الصوت وتطهير الكهف.", next: 3, hp: -20, xp: 50, gold: 100 },
+                        { text: "👑 سحب صندوق الكنز والهروب فوراً.", next: 4, hp: -10, xp: 30, gold: 150 }
+                    ]
+                },
+                {
+                    text: "أثناء بناء المأوى، هاجمتك مجموعة من الذئاب المفترسة ليلاً!",
+                    choices: [
+                        { text: "🔥 استخدام النار لترهيب الذئاب وطردهم.", next: 3, hp: -5, xp: 25, gold: 10 },
+                        { text: "🏃 التسلق فوق الشجرة الشاهقة والانتظار للصباح.", next: 4, hp: -15, xp: 15, gold: 0 }
+                    ]
+                },
+                {
+                    text: "🎉 انتصرت في التحدي الكبير وأصبحت أسطورة المحاربين في القارة!",
+                    choices: []
+                },
+                {
+                    text: "🏆 نجوت بحكمتك وجمعت ثروة ضخمة تمكنك من بناء مدينتك الخاصة!",
+                    choices: []
+                }
+            ],
+            en: [
+                {
+                    text: "Your adventure begins in the Dark Forest. You find an ancient treasure map near a skeleton!",
+                    choices: [
+                        { text: "🗺️ Follow the map to the abandoned cave.", next: 1, hp: 0, xp: 20, gold: 30 },
+                        { text: "🏹 Ignore the map and build a safe camp.", next: 2, hp: 10, xp: 10, gold: 0 }
+                    ]
+                },
+                {
+                    text: "Inside the dark cave, you hear a growl! There's a glowing treasure chest nearby.",
+                    choices: [
+                        { text: "⚔️ Fight the monster hiding in the dark.", next: 3, hp: -20, xp: 50, gold: 100 },
+                        { text: "👑 Grab the chest and run away!", next: 4, hp: -10, xp: 30, gold: 150 }
+                    ]
+                },
+                {
+                    text: "While camping, a pack of wild wolves attacks your shelter at night!",
+                    choices: [
+                        { text: "🔥 Use fire to scare the wolves away.", next: 3, hp: -5, xp: 25, gold: 10 },
+                        { text: "🏃 Climb a tall tree and wait until dawn.", next: 4, hp: -15, xp: 15, gold: 0 }
+                    ]
+                },
+                {
+                    text: "🎉 You conquered the grand challenge and became a legendary hero!",
+                    choices: []
+                },
+                {
+                    text: "🏆 You survived with wisdom and accumulated vast riches!",
+                    choices: []
+                }
+            ],
+            fr: [
+                {
+                    text: "Votre aventure commence dans la Forêt Sombre. Vous trouvez une carte au trésor près d'un squelette!",
+                    choices: [
+                        { text: "🗺️ Suivre la carte vers la grotte abandonnée.", next: 1, hp: 0, xp: 20, gold: 30 },
+                        { text: "🏹 Ignorer la carte et construire un camp.", next: 2, hp: 10, xp: 10, gold: 0 }
+                    ]
+                },
+                {
+                    text: "Dans la grotte sombre, vous entendez un rugissement! Un coffre au trésor brille à côté.",
+                    choices: [
+                        { text: "⚔️ Combattre le monstre dans l'ombre.", next: 3, hp: -20, xp: 50, gold: 100 },
+                        { text: "👑 Attraper le coffre et s'enfuir!", next: 4, hp: -10, xp: 30, gold: 150 }
+                    ]
+                },
+                {
+                    text: "Pendant la nuit, une meute de loups attaque votre campement!",
+                    choices: [
+                        { text: "🔥 Utiliser le feu pour effrayer les loups.", next: 3, hp: -5, xp: 25, gold: 10 },
+                        { text: "🏃 Grimper sur un grand arbre jusqu'au matin.", next: 4, hp: -15, xp: 15, gold: 0 }
+                    ]
+                },
+                {
+                    text: "🎉 Vous avez triomphé du grand défi et êtes devenu un héros légendaire!",
+                    choices: []
+                },
+                {
+                    text: "🏆 Vous avez survécu avec sagesse et accumulé une grande richesse!",
+                    choices: []
+                }
+            ]
+        };
 
-            gameState.health += selected.health;
-            gameState.resources += selected.resources;
-
-            if (gameState.health <= 0) {
-                showEnd("☠️ لقد خسرت جميع نقاط صحتك ولم تستطع البقاء على قيد الحياة!");
-                return;
-            }
-
-            if (selected.next === 'win') {
-                showEnd("🎉 مبروك! لقد استطعت البقاء على قيد الحياة وبناء مستقبلك في هذا العالم الجديد!");
-                return;
-            }
-
-            if (selected.next === 'lose') {
-                showEnd("💀 انتهت الرحلة بشكل حيوي مأساوي بسبب الإصابات.");
-                return;
-            }
-
-            gameState.step = selected.next;
-            renderStory();
-            updateUI();
-        }
-
-        function renderStory() {
-            const current = storyTree[gameState.step];
-            document.getElementById('story-text').innerText = current.text;
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
             
-            const choicesContainer = document.getElementById('choices-container');
-            choicesContainer.innerHTML = '';
+            document.getElementById('select-char-title').innerText = t.selectTitle;
+            document.getElementById('char-warrior-name').innerText = t.warriorName;
+            document.getElementById('char-warrior-desc').innerText = t.warriorDesc;
+            document.getElementById('char-explorer-name').innerText = t.explorerName;
+            document.getElementById('char-explorer-desc').innerText = t.explorerDesc;
+            document.getElementById('char-doctor-name').innerText = t.doctorName;
+            document.getElementById('char-doctor-desc').innerText = t.doctorDesc;
+            document.getElementById('ad-btn-text').innerText = t.adBtn;
+            document.getElementById('lbl-hp').innerText = t.hp;
+            document.getElementById('lbl-xp').innerText = t.xp;
 
-            current.choices.forEach((choice, index) => {
+            if (player.char) {
+                document.getElementById('player-class-display').innerText = t[player.char + 'Name'];
+                renderAdventure();
+            }
+        }
+
+        function selectCharacter(charType) {
+            player.char = charType;
+            if (charType === 'warrior') player.hp = 130;
+            if (charType === 'explorer') player.gold += 50;
+            if (charType === 'doctor') player.hp = 110;
+
+            document.getElementById('character-view').classList.add('hidden');
+            document.getElementById('game-view').classList.remove('hidden');
+            setLanguage(currentLang);
+        }
+
+        function showAdReward() {
+            player.gold += 50;
+            document.getElementById('gold-display').innerText = player.gold;
+            alert(translations[currentLang].adWatchMsg);
+        }
+
+        function makeChoice(idx) {
+            const node = adventureTree[currentLang][currentStep];
+            const choice = node.choices[idx];
+
+            player.hp += choice.hp;
+            player.xp += choice.xp;
+            player.gold += choice.gold;
+
+            document.getElementById('hp').innerText = player.hp;
+            document.getElementById('xp').innerText = player.xp;
+            document.getElementById('gold-display').innerText = player.gold;
+
+            if (player.hp <= 0) {
+                document.getElementById('story-box').innerText = translations[currentLang].gameOver;
+                document.getElementById('choices-box').innerHTML = `
+                    <button onclick="location.reload()" class="w-full p-4 bg-rose-700 hover:bg-rose-600 font-bold rounded-xl">
+                        ${translations[currentLang].restartBtn}
+                    </button>
+                `;
+                return;
+            }
+
+            currentStep = choice.next;
+            renderAdventure();
+        }
+
+        function renderAdventure() {
+            const node = adventureTree[currentLang][currentStep];
+            document.getElementById('story-box').innerText = node.text;
+
+            const box = document.getElementById('choices-box');
+            box.innerHTML = '';
+
+            if (node.choices.length === 0) {
+                box.innerHTML = `
+                    <button onclick="location.reload()" class="w-full p-4 bg-teal-600 hover:bg-teal-500 font-bold rounded-xl">
+                        ${translations[currentLang].restartBtn}
+                    </button>
+                `;
+                return;
+            }
+
+            node.choices.forEach((c, idx) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full text-right p-4 bg-slate-800 hover:bg-teal-900/40 border border-slate-700 hover:border-teal-500/50 rounded-xl transition duration-200 text-slate-100 font-medium flex items-center justify-between group";
-                btn.onclick = () => makeChoice(index + 1);
-                btn.innerHTML = `<span>${choice.text}</span><span class="text-teal-400 opacity-0 group-hover:opacity-100 transition">←</span>`;
-                choicesContainer.appendChild(btn);
+                btn.className = "w-full text-start p-4 bg-slate-900 hover:bg-teal-900/40 border border-slate-800 hover:border-teal-500/50 rounded-xl transition font-medium flex items-center justify-between";
+                btn.onclick = () => makeChoice(idx);
+                btn.innerHTML = `<span>${c.text}</span><span class="text-teal-400">➔</span>`;
+                box.appendChild(btn);
             });
-        }
-
-        function showEnd(message) {
-            document.getElementById('story-text').innerText = message;
-            document.getElementById('choices-container').innerHTML = '';
-            document.getElementById('restart-container').classList.remove('hidden');
-            updateUI();
-        }
-
-        function resetGame() {
-            gameState = { health: 100, resources: 50, step: 0 };
-            document.getElementById('restart-container').classList.add('hidden');
-            renderStory();
-            updateUI();
         }
     </script>
 </body>
