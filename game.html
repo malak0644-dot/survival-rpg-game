@@ -3,68 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus AI - المساعد الذكي الخارق</title>
+    <title>Nova AI - المنصة الذكية المتكاملة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background: #020617; color: #f8fafc; }
-        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(56, 189, 248, 0.2); }
-        .ai-glow { box-shadow: 0 0 40px rgba(14, 165, 233, 0.15); }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #0f172a, #311042, #1e1b4b); color: #f8fafc; }
+        .glass-card { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(25px); border: 1px solid rgba(236, 72, 153, 0.3); }
+        .neon-glow { box-shadow: 0 0 35px rgba(236, 72, 153, 0.25); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-between p-3 sm:p-6">
 
-    <!-- Top Navigation -->
-    <header class="w-full max-w-5xl flex justify-between items-center pb-4 mb-4 border-b border-slate-800">
+    <!-- Top Header -->
+    <header class="w-full max-w-5xl flex justify-between items-center pb-4 mb-4 border-b border-purple-900/50">
         <div class="flex items-center gap-3">
-            <div class="bg-sky-500 text-slate-950 font-black p-2.5 rounded-2xl text-xl shadow-lg">⚡ NEXUS</div>
-            <span class="text-sm font-bold text-sky-400">الذكاء الاصطناعي الجيل القادم</span>
+            <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black p-2.5 rounded-2xl text-xl shadow-lg">✨ NOVA</div>
+            <span class="text-sm font-bold text-pink-400">الذكاء الاصطناعي متعدد الأبعاد</span>
         </div>
         <div class="flex items-center gap-3">
-            <div class="bg-amber-950/80 border border-amber-500/40 px-4 py-1.5 rounded-2xl text-amber-300 font-bold text-sm">
-                💎 رصيد التوكنز: <span id="tokens">1,000</span>
+            <div class="bg-purple-950/90 border border-purple-500/40 px-4 py-1.5 rounded-2xl text-pink-300 font-bold text-sm">
+                💎 رصيد العملات: <span id="tokens-val">5,000</span>
             </div>
-            <button onclick="buyMoreTokens()" class="bg-gradient-to-r from-sky-500 to-indigo-600 hover:scale-105 text-white font-black px-4 py-2 rounded-2xl text-xs shadow-lg transition">
-                شحن رصيد الأرباح 🚀
+            <button onclick="upgradeToken()" class="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 hover:scale-105 text-white font-black px-4 py-2 rounded-2xl text-xs shadow-lg transition">
+                شحن باقة الأرباح 🚀
             </button>
         </div>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="w-full max-w-5xl glass-panel rounded-3xl p-6 ai-glow grid grid-cols-1 md:grid-cols-4 gap-6 flex-grow">
+    <!-- Main Workspace Area -->
+    <main class="w-full max-w-5xl glass-card rounded-3xl p-6 neon-glow grid grid-cols-1 md:grid-cols-4 gap-6 flex-grow">
         
-        <!-- Sidebar Options -->
-        <div class="flex flex-col gap-3 border-b md:border-b-0 md:border-l border-slate-800 pb-4 md:pb-0 md:pl-6">
-            <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">أقسام الذكاء الاصطناعي</h3>
-            <button onclick="switchTab('chat')" id="tab-chat" class="p-3 bg-sky-950/60 border border-sky-500/50 rounded-2xl text-right font-bold text-sky-200 transition flex items-center gap-3">
-                <span>💬</span> المحادثة الذكية الشاملة
+        <!-- Navigation Tabs with Vibrant Colors -->
+        <div class="flex flex-col gap-3 border-b md:border-b-0 md:border-l border-purple-900/50 pb-4 md:pb-0 md:pl-6">
+            <h3 class="text-xs font-black text-pink-300 uppercase tracking-wider mb-2">أقسام المنصة الذكية</h3>
+            <button onclick="changeMode('chat')" id="btn-chat" class="p-3 bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl text-right font-bold text-white transition flex items-center gap-3 shadow-md">
+                <span>💬</span> دردشة الذكاء الاصطناعي
             </button>
-            <button onclick="switchTab('image')" id="tab-image" class="p-3 bg-slate-900/60 border border-slate-800 rounded-2xl text-right font-bold text-slate-300 hover:bg-slate-800 transition flex items-center gap-3">
-                <span>🎨</span> توليد الصور الخارقة
+            <button onclick="changeMode('image')" id="btn-image" class="p-3 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-right font-bold text-slate-200 transition flex items-center gap-3">
+                <span>🎨</span> مولد الصور الفنية الخارقة
             </button>
-            <button onclick="switchTab('code')" id="tab-code" class="p-3 bg-slate-900/60 border border-slate-800 rounded-2xl text-right font-bold text-slate-300 hover:bg-slate-800 transition flex items-center gap-3">
-                <span>💻</span> مبرمج الأكواد الآلي
+            <button onclick="changeMode('code')" id="btn-code" class="p-3 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-right font-bold text-slate-200 transition flex items-center gap-3">
+                <span>💻</span> مولد الأكواد والبرمجة
             </button>
-            <button onclick="switchTab('business')" id="tab-business" class="p-3 bg-slate-900/60 border border-slate-800 rounded-2xl text-right font-bold text-slate-300 hover:bg-slate-800 transition flex items-center gap-3">
+            <button onclick="changeMode('business')" id="btn-business" class="p-3 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-right font-bold text-slate-200 transition flex items-center gap-3">
                 <span>📈</span> محلل ومخطط المشاريع المليارية
             </button>
         </div>
 
-        <!-- Content Arena -->
+        <!-- Interactive Core Screen -->
         <div class="md:col-span-3 flex flex-col justify-between space-y-4">
             
-            <!-- Output / Screen Area -->
-            <div id="ai-output" class="bg-slate-950/90 border border-slate-800 rounded-2xl p-5 min-h-[350px] max-h-[450px] overflow-y-auto text-slate-200 text-sm leading-relaxed space-y-4">
-                <div class="p-3 bg-sky-950/40 border border-sky-900/50 rounded-xl">
-                    مرحباً بكِ في نظام **Nexus AI**. أنا مبرمج لتوليد الحلول، الأكواد، وتحليل المشاريع الضخمة التي تدر عليكِ أرباحاً طائلة. كيف أساعدكِ اليوم؟
+            <!-- Output Display Box -->
+            <div id="screen-output" class="bg-slate-950/90 border border-purple-900/40 rounded-2xl p-5 min-h-[350px] max-h-[450px] overflow-y-auto text-slate-100 text-sm leading-relaxed space-y-4">
+                <div class="p-4 bg-purple-950/50 border border-purple-800/40 rounded-xl text-pink-200">
+                    أهلاً بكِ في **Nova AI**. تم تصميم هذا الإصدار خصيصاً بألوان متجددة واستجابة فورية لتوليد النصوص، البرمجة، وتخطيط المشاريع بدقة متناهية. ابدئي بكتابة طلبكِ الآن!
                 </div>
             </div>
 
-            <!-- Input & Action Bar -->
+            <!-- Input Bar -->
             <div class="flex gap-2">
-                <input type="text5" id="user-input" placeholder="اكتبي طلبكِ هنا (مثلاً: اصنع لي خطة مشروع ملياريه)..." class="flex-grow bg-slate-900 border border-slate-700 focus:border-sky-500 rounded-2xl px-4 py-3 text-sm text-slate-100 focus:outline-none transition">
-                <button onclick="processAIRequest()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-black px-6 py-3 rounded-2xl transition shadow-lg">
-                    إرسال ⚡
+                <input type="text" id="user-query" placeholder="اكتبي ما ترغبين بتوليده هنا..." class="flex-grow bg-slate-900/90 border border-purple-700/50 focus:border-pink-500 rounded-2xl px-4 py-3 text-sm text-slate-100 focus:outline-none transition">
+                <button onclick="executeAI()" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black px-6 py-3 rounded-2xl transition shadow-lg">
+                    تنفيذ ✨
                 </button>
             </div>
 
@@ -73,61 +73,60 @@
     </main>
 
     <!-- Footer -->
-    <footer class="w-full max-w-5xl text-center pt-4 text-xs text-slate-500">
-        Nexus AI Super Engine &copy; 2026 - نظام الذكاء الاصطناعي المالي المتطور
+    <footer class="w-full max-w-5xl text-center pt-4 text-xs text-pink-300/70">
+        Nova AI Engine &copy; 2026 - نظام الذكاء الاصطناعي المالي والتطويري المتطور
     </footer>
 
     <script>
-        let currentSection = 'chat';
-        let userTokens = 1000;
+        let currentMode = 'chat';
+        let tokensCount = 5000;
 
-        function switchTab(section) {
-            currentSection = section;
-            ['chat', 'image', 'code', 'business'].forEach(s => {
-                const btn = document.getElementById(`tab-${s}`);
-                if(s === section) {
-                    btn.className = "p-3 bg-sky-950/60 border border-sky-500/50 rounded-2xl text-right font-bold text-sky-200 transition flex items-center gap-3";
+        function changeMode(mode) {
+            currentMode = mode;
+            ['chat', 'image', 'code', 'business'].forEach(m => {
+                const btn = document.getElementById(`btn-${m}`);
+                if(m === mode) {
+                    btn.className = "p-3 bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl text-right font-bold text-white transition flex items-center gap-3 shadow-md";
                 } else {
-                    btn.className = "p-3 bg-slate-900/60 border border-slate-800 rounded-2xl text-right font-bold text-slate-300 hover:bg-slate-800 transition flex items-center gap-3";
+                    btn.className = "p-3 bg-slate-800/80 hover:bg-slate-700 rounded-2xl text-right font-bold text-slate-200 transition flex items-center gap-3";
                 }
             });
 
-            const output = document.getElementById('ai-output');
-            if(section === 'chat') output.innerHTML = `<div class="p-3 bg-sky-950/40 border border-sky-900/50 rounded-xl">أهلاً بكِ في قسم المحادثة الذكية. اطرحي أي سؤال وسأقوم بتحليله فوراً!</div>`;
-            if(section === 'image') output.innerHTML = `<div class="p-3 bg-indigo-950/40 border border-indigo-900/50 rounded-xl">🎨 قسم توليد الصور الخارقة مفعل. اكتبي وصف الصورة المطلوبة لتحويلها لواقع رقمي.</div>`;
-            if(section === 'code') output.innerHTML = `<div class="p-3 bg-emerald-950/40 border border-emerald-900/50 rounded-xl">💻 قسم برمجة التطبيقات والمواقع جاهز لكتابة آلاف الأسطر البرمجية بدقة متناهية.</div>`;
-            if(section === 'business') output.innerHTML = `<div class="p-3 bg-amber-950/40 border border-amber-900/50 rounded-xl">📈 محلل المشاريع المليارية: جاهز لبناء استراتيجيات التسويق والأرباح الخيالية.</div>`;
+            const screen = document.getElementById('screen-output');
+            if(mode === 'chat') screen.innerHTML = `<div class="p-4 bg-purple-950/50 border border-purple-800/40 rounded-xl text-pink-200">💬 قسم المحادثة مفعل. اطرحي أي سؤال وسأجيبكِ فوراً!</div>`;
+            if(mode === 'image') screen.innerHTML = `<div class="p-4 bg-pink-950/50 border border-pink-800/40 rounded-xl text-pink-200">🎨 قسم توليد الصور الفنية: اكتبي وصف الصورة لتحويله إلى عمل مرئي مذهل.</div>`;
+            if(mode === 'code') screen.innerHTML = `<div class="p-4 bg-indigo-950/50 border border-indigo-800/40 rounded-xl text-pink-200">💻 قسم هندسة الأكواد: جاهز لكتابة برمجيات متقدمة وخالية من الأخطاء.</div>`;
+            if(mode === 'business') screen.innerHTML = `<div class="p-4 bg-amber-950/50 border border-amber-800/40 rounded-xl text-pink-200">📈 محلل المشاريع المليارية: جاهز لصياغة استراتيجيات الأرباح الكبرى.</div>`;
         }
 
-        function buyMoreTokens() {
-            userTokens += 5000;
-            document.getElementById('tokens').innerText = userTokens.toLocaleString();
-            alert("✨ تم شحن رصيد التوكنز بنجاح عبر نظام المدفوعات والاشتراكات!");
+        function upgradeToken() {
+            tokensCount += 10000;
+            document.getElementById('tokens-val').innerText = tokensCount.toLocaleString();
+            alert("🌟 تمت زيادة الرصيد البنكي وأرباح المنصة بنجاح!");
         }
 
-        function processAIRequest() {
-            const inputField = document.getElementById('user-input');
-            const text = inputField.value.trim();
-            if(!text) return;
+        function executeAI() {
+            const input = document.getElementById('user-query');
+            const val = input.value.trim();
+            if(!val) return;
 
-            const output = document.getElementById('ai-output');
-            
-            // عرض رسالة المستخدم
-            output.innerHTML += `<div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-left text-sky-300"><b>أنتِ:</b> ${text}</div>`;
-            inputField.value = '';
+            const screen = document.getElementById('screen-output');
+            screen.innerHTML += `<div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-left text-pink-300"><b>أنتِ:</b> ${val}</div>`;
+            input.value = '';
 
-            // محاكاة استجابة ذكاء اصطناعي عملاقة وخارقة
             setTimeout(() => {
-                let aiReply = `جاري معالجة طلبكِ عبر خوارزميات Nexus العميقة... بناءً على مدخلاتكِ، تم تصميم النموذج البرمجي والمالي بنجاح لتحقيق أعلى عوائد أرباح ممكنة، مع تحسين كافة تفاصيل الواجهة لتكون مبهرة وجذابة للمستخدمين حول العالم.`;
-                if(currentSection === 'code') {
-                    aiReply = `💻 تم توليد الكود البرمجي الخارق بنجاح:\n\n\`\`@app.route('/deploy_billion')\ndef billion_machine():\n    return 'System Optimized for Massive Revenue & Global Scale!'\`\`\n\nهذا الكود مصمم للعمل بسرعة فائقة وتحقيق أرباح ضخمة دون أخطاء!`;
-                } else if(currentSection === 'business') {
-                    aiReply = `📈 دراسة جدوى المشروع الملياري:\n1. استهداف الجمهور العالمي عبر دعم الإنجليزية والفرنسية.\n2. دمج إعلانات AdMob والاشتراكات الشهرية المدفوعة.\n3. نسبة النجاح المتوقعة: 99.8% بناءً على مؤشرات السوق الرقمي الحالي!`;
+                let reply = `✨ تم تحليل طلبكِ بنجاح عبر خوارزميات Nova المتطورة. تم تحسين الجودة وتهيئة النتيجة لتكون مذهلة وجاهزة للاستخدام الفوري!`;
+                if(currentMode === 'code') {
+                    reply = `💻 تم بناء النظام البرمجي بنجاح:\n\n\`\`python\n# Nova High-Performance System\ndef optimize_revenue():\n    return 'System Scaled for Maximum Profit & Success!'\n\`\`\nكود متكامل، فائق السرعة، ومصمم خصيصاً لتحقيق أعلى عوائد أرباح!`;
+                } else if(currentMode === 'business') {
+                    reply = `📈 خطة المشروع الملياري المقترحة:\n1. استهداف الأسواق الرقمية الكبرى عالمياً.\n2. دمج آليات تحقيق الدخل التلقائي عبر الإعلانات والاشتراكات.\n3. معدل نجاح تقريبي: 99.9% بناءً على أحدث مؤشرات الأداء الرقمي!`;
+                } else if(currentMode === 'image') {
+                    reply = `🎨 جاري معالجة الألوان والخطوط لتوليد الصورة الفنية المطلوبة... تم إصدار التصميم بدقة عالية (4K) مع ألوان بصرية مبهرة!`;
                 }
 
-                output.innerHTML += `<div class="p-3 bg-sky-950/30 border border-sky-800/40 rounded-xl text-slate-100"><b>Nexus AI:</b> ${aiReply}</div>`;
-                output.scrollTop = output.scrollHeight;
-            }, 800);
+                screen.innerHTML += `<div class="p-3 bg-purple-950/30 border border-purple-700/40 rounded-xl text-slate-100"><b>Nova AI:</b> ${reply}</div>`;
+                screen.scrollTop = screen.scrollHeight;
+            }, 600);
         }
     </script>
 </body>
