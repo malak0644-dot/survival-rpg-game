@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رحلة البقاء والقرار المصيري</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            50: '#f0fdfa',
+                            500: '#14b8a6',
+                            900: '#134e4a',
+                            dark: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(20, 184, 166, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 flex flex-col items-center justify-center">
+
+    <div class="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl glow-effect relative overflow-hidden">
+        
+        <!-- Header / Stats -->
+        <div class="flex justify-between items-center pb-4 mb-6 border-b border-slate-800">
+            <h1 class="text-xl font-bold text-teal-400 flex items-center gap-2">
+                <span>⚔️</span> رحلة البقاء
+            </h1>
+            <div class="flex items-center gap-4 text-sm font-semibold">
+                <div class="bg-rose-950/50 border border-rose-800/50 px-3 py-1 rounded-full text-rose-300">
+                    ❤️ الصحة: <span id="health">100</span>%
+                </div>
+                <div class="bg-amber-950/50 border border-amber-800/50 px-3 py-1 rounded-full text-amber-300">
+                    🎒 الموارد: <span id="resources">50</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="story-container" class="space-y-6">
+            <div class="bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-slate-200 leading-relaxed text-lg" id="story-text">
+                تستيقظ في عالم غريب بعد كارثة عالمية. تحيط بك الأنقاض والأصوات المريبة من كل مكان. ماذا ستفعل الآن؟
+            </div>
+
+            <!-- Choice Buttons -->
+            <div id="choices-container" class="grid grid-cols-1 gap-3">
+                <button onclick="makeChoice(1)" class="w-full text-right p-4 bg-slate-800 hover:bg-teal-900/40 border border-slate-700 hover:border-teal-500/50 rounded-xl transition duration-200 text-slate-100 font-medium flex items-center justify-between group">
+                    <span>🔍 استكشاف المأوى المجهول المباشر أمامك.</span>
+                    <span class="text-teal-400 opacity-0 group-hover:opacity-100 transition">←</span>
+                </button>
+                <button onclick="makeChoice(2)" class="w-full text-right p-4 bg-slate-800 hover:bg-teal-900/40 border border-slate-700 hover:border-teal-500/50 rounded-xl transition duration-200 text-slate-100 font-medium flex items-center justify-between group">
+                    <span>🏃 البحث عن طعام وماء في الغابة القريبة.</span>
+                    <span class="text-teal-400 opacity-0 group-hover:opacity-100 transition">←</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Restart Button (Hidden initially) -->
+        <div id="restart-container" class="hidden text-center pt-4">
+            <button onclick="resetGame()" class="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl shadow-lg transition duration-200">
+                🔄 إعادة التشغيل من الجديد
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            health: 100,
+            resources: 50,
+            step: 0
+        };
+
+        const storyTree = {
+            0: {
+                text: "تستيقظ في عالم غريب بعد كارثة عالمية. تحيط بك الأنقاض والأصوات المريبة من كل مكان. ماذا ستفعل الآن؟",
+                choices: [
+                    { text: "🔍 استكشاف المأوى المجهول المباشر أمامك.", next: 1, health: 0, resources: 10 },
+                    { text: "🏃 البحث عن طعام وماء في الغابة القريبة.", next: 2, health: -10, resources: 20 }
+                ]
+            },
+            1: {
+                text: "دخلت المأوى ووجدت صندوق مؤن قديم، لكنك سمعت صوتاً خفياً خلف الباب المغلق!",
+                choices: [
+                    { text: "📦 فتح الصندوق بسرعة وأخذ الغنائم.", next: 3, health: 0, resources: 30 },
+                    { text: "🚪 فحص الباب المغلق والتأكد من عدم وجود تهديد.", next: 4, health: -15, resources: 0 }
+                ]
+            },
+            2: {
+                text: "في الغابة، عثرت على نبع ماء نقي، لكن ظهر ذئب مفترس يحرس المنطقة!",
+                choices: [
+                    { text: "⚔️ مواجهة الذئب بسلاح بدائي.", next: 5, health: -30, resources: 15 },
+                    { text: "🧗 التراجع والاهتمام بالهرب بأمان.", next: 0, health: -5, resources: 0 }
+                ]
+            },
+            3: {
+                text: "مبروك! حصلت على موارد قيمة ونجوت بنجاح من المرحلة الأولى! هل تريد مواصلة مغامرتك؟",
+                choices: [
+                    { text: "🏆 الفوز والإنهاء بنجاح!", next: 'win', health: 10, resources: 50 }
+                ]
+            },
+            4: {
+                text: "كان هناك فخ متفجر خلف الباب! تعرضت لإصابة خطيرة.",
+                choices: [
+                    { text: "💔 محاولة علاج نفسك.", next: 'lose', health: -50, resources: -20 }
+                ]
+            },
+            5: {
+                text: "انتصرت على الذئب بشجاعة واستوليت على المنطقة والموارد!",
+                choices: [
+                    { text: "🌟 إكمال المغامرة كبطل العصر!", next: 'win', health: 20, resources: 40 }
+                ]
+            }
+        };
+
+        function updateUI() {
+            document.getElementById('health').innerText = gameState.health;
+            document.getElementById('resources').innerText = gameState.resources;
+        }
+
+        function makeChoice(choiceIndex) {
+            const currentStory = storyTree[gameState.step];
+            const selected = currentStory.choices[choiceIndex - 1];
+
+            gameState.health += selected.health;
+            gameState.resources += selected.resources;
+
+            if (gameState.health <= 0) {
+                showEnd("☠️ لقد خسرت جميع نقاط صحتك ولم تستطع البقاء على قيد الحياة!");
+                return;
+            }
+
+            if (selected.next === 'win') {
+                showEnd("🎉 مبروك! لقد استطعت البقاء على قيد الحياة وبناء مستقبلك في هذا العالم الجديد!");
+                return;
+            }
+
+            if (selected.next === 'lose') {
+                showEnd("💀 انتهت الرحلة بشكل حيوي مأساوي بسبب الإصابات.");
+                return;
+            }
+
+            gameState.step = selected.next;
+            renderStory();
+            updateUI();
+        }
+
+        function renderStory() {
+            const current = storyTree[gameState.step];
+            document.getElementById('story-text').innerText = current.text;
+            
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+
+            current.choices.forEach((choice, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-right p-4 bg-slate-800 hover:bg-teal-900/40 border border-slate-700 hover:border-teal-500/50 rounded-xl transition duration-200 text-slate-100 font-medium flex items-center justify-between group";
+                btn.onclick = () => makeChoice(index + 1);
+                btn.innerHTML = `<span>${choice.text}</span><span class="text-teal-400 opacity-0 group-hover:opacity-100 transition">←</span>`;
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        function showEnd(message) {
+            document.getElementById('story-text').innerText = message;
+            document.getElementById('choices-container').innerHTML = '';
+            document.getElementById('restart-container').classList.remove('hidden');
+            updateUI();
+        }
+
+        function resetGame() {
+            gameState = { health: 100, resources: 50, step: 0 };
+            document.getElementById('restart-container').classList.add('hidden');
+            renderStory();
+            updateUI();
+        }
+    </script>
+</body>
+</html>
